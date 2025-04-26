@@ -1,20 +1,43 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+// 🧠 KPI Brain Map
+const industryKPI = {
+  Finance: [
+    { name: 'Portfolio Carbon Intensity', type: 'number', placeholder: 'Carbon Intensity (tons CO₂/portfolio)' },
+    { name: 'Fair Lending Practices', type: 'checkbox', placeholder: 'Fair Lending Compliance' },
+  ],
+  IT: [
+    { name: 'Data Center Energy Usage', type: 'number', placeholder: 'Energy Use (MWh/year)' },
+    { name: 'Workforce Diversity', type: 'number', placeholder: 'Employee Diversity (%)' },
+    { name: 'Cybersecurity Compliance', type: 'checkbox', placeholder: 'Data Security Compliance' },
+  ],
+  Wholesale: [
+    { name: 'Logistics Carbon Footprint', type: 'number', placeholder: 'CO₂ Emissions (kg/ton)' },
+    { name: 'Employee Turnover Rate', type: 'number', placeholder: 'Turnover Rate (%)' },
+  ],
+  Construction: [
+    { name: 'Water Usage', type: 'number', placeholder: 'Water Consumption (m³/year)' },
+    { name: 'Safety Incident Rate', type: 'number', placeholder: 'Safety Incidents (%)' },
+  ],
+  Manufacturing: [
+    { name: 'CO₂ Emissions per Product', type: 'number', placeholder: 'CO₂ per Unit (kg/unit)' },
+    { name: 'Waste Recycling Rate', type: 'number', placeholder: 'Recycling Rate (%)' },
+  ],
+  "Full ESG Scorecard": [
+    { name: 'Scope 1+2 CO₂', type: 'number', placeholder: 'Scope 1+2 CO₂ (ton/metal)' },
+    { name: 'Energy Intensity', type: 'number', placeholder: 'Energy Intensity (GJ/ton)' },
+    { name: 'Water Intensity', type: 'number', placeholder: 'Water Intensity (m³/ton)' },
+    { name: 'Recycling % or Tailings Reuse', type: 'number', placeholder: 'Recycling % or Reuse' },
+    { name: 'Land Disturbed', type: 'number', placeholder: 'Land Disturbed (hectares/ton)' },
+    { name: 'Land Rehabilitated', type: 'number', placeholder: '% Land Rehabilitated Annually' },
+  ],
+};
+
 function FormPage() {
   const navigate = useNavigate();
   const field = localStorage.getItem('field');
-
-  const [formData, setFormData] = useState({
-    energy: '',
-    diversity: '',
-    compliance: false,
-    co2: '',
-    water: '',
-    recycle: '',
-    land: '',
-    rehab: ''
-  });
+  const [formData, setFormData] = useState({});
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -35,46 +58,29 @@ function FormPage() {
     navigate('/result', { state: { scores } });
   };
 
+  const selectedKPIs = industryKPI[field] || [];
+
   return (
     <form onSubmit={handleSubmit}>
-      <h2>ESG Form for {field}</h2>
+      <h2>ESG Assessment for {field}</h2>
 
-      {field === 'Full ESG Scorecard' ? (
-        <>
-          <input type="number" placeholder="Scope 1+2 CO₂ (ton/metal)"
-                 value={formData.co2}
-                 onChange={(e) => setFormData({ ...formData, co2: e.target.value })} />
-          <input type="number" placeholder="Energy Intensity (GJ/ton)"
-                 value={formData.energy}
-                 onChange={(e) => setFormData({ ...formData, energy: e.target.value })} />
-          <input type="number" placeholder="Water Intensity (m³/ton)"
-                 value={formData.water}
-                 onChange={(e) => setFormData({ ...formData, water: e.target.value })} />
-          <input type="number" placeholder="Recycling % or Tailings Reuse"
-                 value={formData.recycle}
-                 onChange={(e) => setFormData({ ...formData, recycle: e.target.value })} />
-          <input type="number" placeholder="Land Disturbed (Hectares/ton)"
-                 value={formData.land}
-                 onChange={(e) => setFormData({ ...formData, land: e.target.value })} />
-          <input type="number" placeholder="% Land Rehabilitated Annually"
-                 value={formData.rehab}
-                 onChange={(e) => setFormData({ ...formData, rehab: e.target.value })} />
-        </>
-      ) : (
-        <>
-          <input type="number" placeholder="Energy Consumption"
-                 value={formData.energy}
-                 onChange={(e) => setFormData({ ...formData, energy: e.target.value })} />
-          <input type="number" placeholder="Employee Diversity (%)"
-                 value={formData.diversity}
-                 onChange={(e) => setFormData({ ...formData, diversity: e.target.value })} />
-          <label>
-            <input type="checkbox" checked={formData.compliance}
-                   onChange={(e) => setFormData({ ...formData, compliance: e.target.checked })} />
-            Policy Compliance
-          </label>
-        </>
-      )}
+      {selectedKPIs.map((kpi, index) => (
+        <div key={index}>
+          {kpi.type === 'checkbox' ? (
+            <label>
+              <input type="checkbox"
+                     checked={formData[kpi.name] || false}
+                     onChange={(e) => setFormData({ ...formData, [kpi.name]: e.target.checked })} />
+              {kpi.placeholder}
+            </label>
+          ) : (
+            <input type={kpi.type}
+                   placeholder={kpi.placeholder}
+                   value={formData[kpi.name] || ''}
+                   onChange={(e) => setFormData({ ...formData, [kpi.name]: e.target.value })} />
+          )}
+        </div>
+      ))}
 
       <button type="submit">Submit</button>
     </form>
