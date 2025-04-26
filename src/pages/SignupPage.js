@@ -7,7 +7,7 @@ function SignupPage() {
 
   const handleSignup = async (e) => {
     e.preventDefault();
-    const response = await fetch('https://esg-backend-7u6v.onrender.com/api/signup', {
+    const response = await fetch('https://esg-backend-1.onrender.com/api/signup', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(formData),

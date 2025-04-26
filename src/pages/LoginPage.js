@@ -7,7 +7,7 @@ function LoginPage() {
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    const response = await fetch('https://esg-backend-7u6v.onrender.com/api/login', {
+    const response = await fetch('https://esg-backend-1.onrender.com/api/login', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(formData),
