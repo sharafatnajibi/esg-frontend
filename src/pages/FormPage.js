@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 function FormPage() {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({ energy: '', diversity: '', compliance: false });
-  const field = localStorage.getItem('field'); // Get the selected field
+  const field = localStorage.getItem('field');
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -16,7 +16,7 @@ function FormPage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const response = await fetch('http://localhost:5000/api/compute', {
+    const response = await fetch('https://esg-backend-7u6v.onrender.com/api/compute', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(formData),
@@ -29,7 +29,7 @@ function FormPage() {
     <form onSubmit={handleSubmit}>
       <h2>ESG Assessment for {field}</h2>
 
-      {/* Show different first question based on selected field */}
+      {/* Show different question based on selected field */}
       {field === 'Finance' && (
         <>
           <input type="number" placeholder="Financial Risk Management Score"
@@ -54,7 +54,6 @@ function FormPage() {
         </>
       )}
 
-      {/* Common questions for all fields */}
       <input type="number" placeholder="Employee Diversity (%)"
              value={formData.diversity}
              onChange={(e) => setFormData({ ...formData, diversity: e.target.value })} />
