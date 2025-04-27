@@ -17,17 +17,17 @@ function FormPage() {
     localEmployment: '',
     communityInvestment: '',
     collectiveBargaining: '',
-    indigenousEngagement: false,
+    indigenousEngagement: '',
     trainingHours: '',
-    humanRightsGrievance: false,
+    humanRightsGrievance: '',
     boardIndependence: '',
-    antiCorruptionPolicy: false,
-    whistleblowerSystem: false,
+    antiCorruptionPolicy: '',
+    whistleblowerSystem: '',
     revenueTransparency: '',
     contractTransparency: '',
-    beneficialOwnership: false,
-    supplierCompliance: false,
-    politicalEngagement: false,
+    beneficialOwnership: '',
+    supplierCompliance: '',
+    politicalEngagement: '',
   });
 
   useEffect(() => {
@@ -40,11 +40,23 @@ function FormPage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const formattedData = {
+      ...formData,
+      indigenousEngagement: formData.indigenousEngagement === 'Yes',
+      humanRightsGrievance: formData.humanRightsGrievance === 'Yes',
+      antiCorruptionPolicy: formData.antiCorruptionPolicy === 'Yes',
+      whistleblowerSystem: formData.whistleblowerSystem === 'Yes',
+      beneficialOwnership: formData.beneficialOwnership === 'Yes',
+      supplierCompliance: formData.supplierCompliance === 'Yes',
+      politicalEngagement: formData.politicalEngagement === 'Yes',
+    };
+
     const response = await fetch('https://esg-backend-1.onrender.com/api/compute', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(formData),
+      body: JSON.stringify(formattedData),
     });
+
     const scores = await response.json();
     navigate('/result', { state: { scores } });
   };
@@ -100,21 +112,26 @@ function FormPage() {
         value={formData.collectiveBargaining}
         onChange={(e) => setFormData({ ...formData, collectiveBargaining: e.target.value })}
       />
-      <label>
-        <input type="checkbox" checked={formData.indigenousEngagement}
-          onChange={(e) => setFormData({ ...formData, indigenousEngagement: e.target.checked })}
-        />
-        Indigenous Engagement (FPIC Compliance)
+
+      <label>Indigenous Engagement (FPIC Compliance)
+        <select value={formData.indigenousEngagement} onChange={(e) => setFormData({ ...formData, indigenousEngagement: e.target.value })}>
+          <option value="">Select</option>
+          <option value="Yes">Yes</option>
+          <option value="No">No</option>
+        </select>
       </label>
+
       <input type="number" placeholder="Employee Training Hours (hours/employee/year)"
         value={formData.trainingHours}
         onChange={(e) => setFormData({ ...formData, trainingHours: e.target.value })}
       />
-      <label>
-        <input type="checkbox" checked={formData.humanRightsGrievance}
-          onChange={(e) => setFormData({ ...formData, humanRightsGrievance: e.target.checked })}
-        />
-        Human Rights Grievances Handling (Transparent Reporting)
+
+      <label>Human Rights Grievances Handling
+        <select value={formData.humanRightsGrievance} onChange={(e) => setFormData({ ...formData, humanRightsGrievance: e.target.value })}>
+          <option value="">Select</option>
+          <option value="Yes">Yes</option>
+          <option value="No">No</option>
+        </select>
       </label>
 
       {/* Governance */}
@@ -122,18 +139,23 @@ function FormPage() {
         value={formData.boardIndependence}
         onChange={(e) => setFormData({ ...formData, boardIndependence: e.target.value })}
       />
-      <label>
-        <input type="checkbox" checked={formData.antiCorruptionPolicy}
-          onChange={(e) => setFormData({ ...formData, antiCorruptionPolicy: e.target.checked })}
-        />
-        Anti-Corruption Policy Existence
+
+      <label>Anti-Corruption Policy Existence
+        <select value={formData.antiCorruptionPolicy} onChange={(e) => setFormData({ ...formData, antiCorruptionPolicy: e.target.value })}>
+          <option value="">Select</option>
+          <option value="Yes">Yes</option>
+          <option value="No">No</option>
+        </select>
       </label>
-      <label>
-        <input type="checkbox" checked={formData.whistleblowerSystem}
-          onChange={(e) => setFormData({ ...formData, whistleblowerSystem: e.target.checked })}
-        />
-        Whistleblower System Availability
+
+      <label>Whistleblower System Availability
+        <select value={formData.whistleblowerSystem} onChange={(e) => setFormData({ ...formData, whistleblowerSystem: e.target.value })}>
+          <option value="">Select</option>
+          <option value="Yes">Yes</option>
+          <option value="No">No</option>
+        </select>
       </label>
+
       <input type="text" placeholder="Revenue and Payments Transparency (Full/Partial/None)"
         value={formData.revenueTransparency}
         onChange={(e) => setFormData({ ...formData, revenueTransparency: e.target.value })}
@@ -142,23 +164,29 @@ function FormPage() {
         value={formData.contractTransparency}
         onChange={(e) => setFormData({ ...formData, contractTransparency: e.target.value })}
       />
-      <label>
-        <input type="checkbox" checked={formData.beneficialOwnership}
-          onChange={(e) => setFormData({ ...formData, beneficialOwnership: e.target.checked })}
-        />
-        Beneficial Ownership Disclosure
+
+      <label>Beneficial Ownership Disclosure
+        <select value={formData.beneficialOwnership} onChange={(e) => setFormData({ ...formData, beneficialOwnership: e.target.value })}>
+          <option value="">Select</option>
+          <option value="Yes">Yes</option>
+          <option value="No">No</option>
+        </select>
       </label>
-      <label>
-        <input type="checkbox" checked={formData.supplierCompliance}
-          onChange={(e) => setFormData({ ...formData, supplierCompliance: e.target.checked })}
-        />
-        Supplier Compliance Programs
+
+      <label>Supplier Compliance Programs
+        <select value={formData.supplierCompliance} onChange={(e) => setFormData({ ...formData, supplierCompliance: e.target.value })}>
+          <option value="">Select</option>
+          <option value="Yes">Yes</option>
+          <option value="No">No</option>
+        </select>
       </label>
-      <label>
-        <input type="checkbox" checked={formData.politicalEngagement}
-          onChange={(e) => setFormData({ ...formData, politicalEngagement: e.target.checked })}
-        />
-        Political Engagement Disclosure
+
+      <label>Political Engagement Disclosure
+        <select value={formData.politicalEngagement} onChange={(e) => setFormData({ ...formData, politicalEngagement: e.target.value })}>
+          <option value="">Select</option>
+          <option value="Yes">Yes</option>
+          <option value="No">No</option>
+        </select>
       </label>
 
       <button type="submit">Submit</button>
